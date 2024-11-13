@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <set>
+#include <stack>
 
 using namespace std;
 
@@ -124,37 +125,56 @@ int main()
     // Makes an iterator for the vectors
     set<string>::iterator itr;
 
-    // Runs a basic loop to check the prefrences and if they can be fixed up
-    for (int i = 0; i < condPrefVec.size(); i++)
-    {
-        // loops through all the elements in the set
-        for (itr = currentToppings.begin(); itr != currentToppings.end(); itr++) {
-            // *itr
+    bool addedAnotherTopping = true;
 
-            // This checks if one of the ingredients is in the 
-            if (condPrefVec[i].wants.count(*itr) != 0)
-            {
-                condPrefVec[i].wants.erase(*itr);
-                if (!condPrefVec[i].isOrType)
+    stack<int>elementsToClear;
+
+    while (addedAnotherTopping)
+    {
+
+        addedAnotherTopping = false;
+
+        // Runs a basic loop to check the prefrences and if they can be fixed up
+        for (int i = 0; i < condPrefVec.size(); i++)
+        {
+            // loops through all the elements in the set
+            for (itr = currentToppings.begin(); itr != currentToppings.end(); itr++) {
+                // *itr
+
+                // This checks if one of the ingredients is in the 
+                if (condPrefVec[i].wants.count(*itr) != 0)
                 {
-                    if (condPrefVec[i].wants.size() == 0)
+                    condPrefVec[i].wants.erase(*itr);
+                    if (!condPrefVec[i].isOrType)
                     {
+                        if (condPrefVec[i].wants.size() == 0)
+                        {
+                            condPrefVec[i].isCompleted = true;
+                            break;
+                        }
+                    }
+                    else{
                         condPrefVec[i].isCompleted = true;
                         break;
                     }
                 }
-                else{
-                    condPrefVec[i].isCompleted = true;
-                    break;
-                }
+
             }
 
+            if (condPrefVec[i].isCompleted)
+            {
+                currentToppings.insert(condPrefVec[i].toppingRequested);
+                addedAnotherTopping = true;
+                elementsToClear.push(i);
+            } 
         }
 
-        if (condPrefVec[i].isCompleted)
+        while (!elementsToClear.empty())
         {
-            currentToppings.insert(condPrefVec[i].toppingRequested);
-        } 
+            condPrefVec.erase(condPrefVec.begin()+elementsToClear.top());
+            elementsToClear.pop();
+        }
+
     }
     
     cout << currentToppings.size();
