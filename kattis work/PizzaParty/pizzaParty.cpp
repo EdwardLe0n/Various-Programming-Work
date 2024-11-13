@@ -8,6 +8,26 @@ using namespace std;
 
 set<string> currentToppings;
 
+vector<condPref> condPrefVec;
+
+class condPref
+{
+
+    public:
+        // temp var that turns true once it has been stated whether is is an and or or type
+        bool typeStated;
+
+        // if or ==> then this is true, if it's an and type, then this is false
+        bool isOrType;
+
+        // set of the target ingredients that this class wants
+        set <string> wants;
+
+        // 
+        string topppingRequested;
+
+};
+
 int main()
 {
     
@@ -24,48 +44,88 @@ int main()
     // temp var to hold whether it is currently at the first word
     bool firstWord = true;
     
+    // holds whether the reader is inherently at the last word
+    bool lastWord = false;
+    
     // getting user input to see how many orders there are
     cin >> numOfOrders;
     
+    // Input handling
     for (int i = 0; i < numOfOrders; i++)
     {
         
         // Takes in the user request
         cin >> request;
         
-        // clears the string stream of any past variables
-        ss.clear();
-        
-        // puts the user input into the string stream
-        ss << request;
-        
-        // THIS WILL NOT WORK
-        /*
-        * 
-        * Due to the fact that cpp reads any white space; such as a space, new line, etc; as a end of a string, that wouldn't
-        * work with the string reader to read and then parse a new line
-        * 
-        * The best way to go about this would be to just take in lines by word by word with normal strings and then go from there
-        * 
-        */
-
-        // loops through all the words in the stream
-        while (ss >> reader)
+        // First checks if this is the first word
+        if (firstWord)
         {
-            // First checks if there is a first word
-            if (firstWord)
+            if (request != "if")
             {
-                if (reader != "if")
-                {
-                    currentToppings.insert(reader);
-                }
-                
-                firstWord = false;
+                currentToppings.insert(reader);
             }
+
+            // implicative request input handler 
+            else {
+
+                condPref tempCondPref;
+                tempCondPref.typeStated = false;
+
+                while (!lastWord)
+                {
+                    cin >> request;
+
+                    // Deals with typing
+
+                    if ((request == "or" || request == "and"))
+                    {
+
+                        if (!tempCondPref.typeStated)
+                        {
+                            if (request == "or")
+                            {
+                                tempCondPref.isOrType = true;
+                            }
+                            else
+                            {
+                                tempCondPref.isOrType = false;
+                            }
+
+                            tempCondPref.typeStated = true;
+                        }
+
+                    }
+                    else if (request == "then")
+                    {
+                        lastWord = true;
+                    }
+                    else 
+                    {
+                        tempCondPref.wants.insert(request);
+                    }
+
+                    // 
+
+
+                }
+
+                // then at the end, it'll get the last word and set it as the target
+
+                cin >> request;
+                tempCondPref.topppingRequested = request;
+
+                // Finally, the 
+
+            }
+            
+            firstWord = false;
         }
         
-        // Resets the var for the next word
+
+
+        // Resets the vars for the line
         firstWord = true;
+        lastWord = false;
     }
     
     cout << currentToppings.size();
