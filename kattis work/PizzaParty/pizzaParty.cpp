@@ -39,6 +39,16 @@ int main()
         // puts the user input into the string stream
         ss << request;
         
+        // THIS WILL NOT WORK
+        /*
+        * 
+        * Due to the fact that cpp reads any white space; such as a space, new line, etc; as a end of a string, that wouldn't
+        * work with the string reader to read and then parse a new line
+        * 
+        * The best way to go about this would be to just take in lines by word by word with normal strings and then go from there
+        * 
+        */
+
         // loops through all the words in the stream
         while (ss >> reader)
         {
