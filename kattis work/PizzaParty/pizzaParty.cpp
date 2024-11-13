@@ -24,7 +24,7 @@ class condPref
         set <string> wants;
 
         // 
-        string topppingRequested;
+        string toppingRequested;
 
 };
 
@@ -109,7 +109,7 @@ int main()
             // then at the end, it'll get the last word and set it as the target
 
             cin >> request;
-            tempCondPref.topppingRequested = request;
+            tempCondPref.toppingRequested = request;
 
             condPrefVec.push_back(tempCondPref);
 
@@ -131,9 +131,30 @@ int main()
         for (itr = currentToppings.begin(); itr != currentToppings.end(); itr++) {
             // *itr
 
-            
+            // This checks if one of the ingredients is in the 
+            if (condPrefVec[i].wants.count(*itr) != 0)
+            {
+                condPrefVec[i].wants.erase(*itr);
+                if (!condPrefVec[i].isOrType)
+                {
+                    if (condPrefVec[i].wants.size() == 0)
+                    {
+                        condPrefVec[i].isCompleted = true;
+                        break;
+                    }
+                }
+                else{
+                    condPrefVec[i].isCompleted = true;
+                    break;
+                }
+            }
 
         }
+
+        if (condPrefVec[i].isCompleted)
+        {
+            currentToppings.insert(condPrefVec[i].toppingRequested);
+        } 
     }
     
     cout << currentToppings.size();
