@@ -1,5 +1,5 @@
 #include <iostream>
-#include <sstream>
+#include <iterator>
 #include <string>
 #include <vector>
 #include <set>
@@ -8,17 +8,17 @@ using namespace std;
 
 set<string> currentToppings;
 
-vector<condPref> condPrefVec;
-
 class condPref
 {
 
     public:
         // temp var that turns true once it has been stated whether is is an and or or type
-        bool typeStated;
+        bool typeStated = false;
 
         // if or ==> then this is true, if it's an and type, then this is false
         bool isOrType;
+
+        bool isCompleted = false;
 
         // set of the target ingredients that this class wants
         set <string> wants;
@@ -28,6 +28,8 @@ class condPref
 
 };
 
+vector<condPref> condPrefVec;
+
 int main()
 {
     
@@ -36,10 +38,6 @@ int main()
     
     // normal string request that is given by a user
     string request;
-    stringstream ss(request);
-    
-    // temp var to go thrugh the stream
-    string reader;
     
     // temp var to hold whether it is currently at the first word
     bool firstWord = true;
@@ -58,74 +56,84 @@ int main()
         cin >> request;
         
         // First checks if this is the first word
-        if (firstWord)
+        
+        if (request != "if")
         {
-            if (request != "if")
+            currentToppings.insert(request);
+        }
+
+        // implicative request input handler 
+        else {
+
+            condPref tempCondPref;
+            tempCondPref.typeStated = false;
+
+            while (!lastWord)
             {
-                currentToppings.insert(reader);
-            }
+                cin >> request;
 
-            // implicative request input handler 
-            else {
+                // Deals with typing
 
-                condPref tempCondPref;
-                tempCondPref.typeStated = false;
-
-                while (!lastWord)
+                if ((request == "or" || request == "and"))
                 {
-                    cin >> request;
-
-                    // Deals with typing
-
-                    if ((request == "or" || request == "and"))
+                    // IF the type has not been stated, then this will take care of it
+                    if (!tempCondPref.typeStated)
                     {
-
-                        if (!tempCondPref.typeStated)
+                        if (request == "or")
                         {
-                            if (request == "or")
-                            {
-                                tempCondPref.isOrType = true;
-                            }
-                            else
-                            {
-                                tempCondPref.isOrType = false;
-                            }
-
-                            tempCondPref.typeStated = true;
+                            tempCondPref.isOrType = true;
+                        }
+                        else
+                        {
+                            tempCondPref.isOrType = false;
                         }
 
+                        tempCondPref.typeStated = true;
                     }
-                    else if (request == "then")
-                    {
-                        lastWord = true;
-                    }
-                    else 
-                    {
-                        tempCondPref.wants.insert(request);
-                    }
-
-                    // 
-
 
                 }
+                else if (request == "then")
+                {
+                    lastWord = true;
+                }
+                else 
+                {
+                    tempCondPref.wants.insert(request);
+                }
 
-                // then at the end, it'll get the last word and set it as the target
+                // 
 
-                cin >> request;
-                tempCondPref.topppingRequested = request;
-
-                // Finally, the 
 
             }
-            
-            firstWord = false;
+
+            // then at the end, it'll get the last word and set it as the target
+
+            cin >> request;
+            tempCondPref.topppingRequested = request;
+
+            condPrefVec.push_back(tempCondPref);
+
+            // Finally, the 
+
         }
+            
         
-
-
-        // Resets the vars for the line
-        firstWord = true;
         lastWord = false;
+    }
+
+    // Makes an iterator for the vectors
+    set<string>::iterator itr;
+
+    // Runs a basic loop to check the prefrences and if they can be fixed up
+    for (int i = 0; i < condPrefVec.size(); i++)
+    {
+        // loops through all the elements in the set
+        for (itr = currentToppings.begin(); itr != currentToppings.end(); itr++) {
+            // *itr
+
+            
+
+        }
     }
     
     cout << currentToppings.size();
