@@ -1,2 +1,0 @@
-C:\Users\PortableFridge\Documents\GitHub\Various-Programming-Work\Unity Stuff\VR Work\Playground\VR Test 1\VR Test 1\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
-C:\Users\PortableFridge\Documents\GitHub\Various-Programming-Work\Unity Stuff\VR Work\Playground\VR Test 1\VR Test 1\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt
